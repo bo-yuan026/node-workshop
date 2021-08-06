@@ -37,21 +37,21 @@ let job2 = doWork("寫作業", 3000, true);
 job1.then(
   function (resolve) {
     // 負責接受 resolve (成功)
-    console.log("第一個函式被呼叫了", resolve);
+    console.log("第二個函式被呼叫了", resolve);
   },
   function (reject) {
     // 負責接受 reject (失敗)
-    console.log("第一個函式被呼叫了", reject);
+    console.log("第二個函式被呼叫了", reject);
   }
 );
 job2.then(
   function (resolve) {
     // 負責接受 resolve (成功)
-    console.log("第一個函式被呼叫了", resolve);
+    console.log("第三個函式被呼叫了", resolve);
   },
   function (reject) {
     // 負責接受 reject (失敗)
-    console.log("第一個函式被呼叫了", reject);
+    console.log("第三個函式被呼叫了", reject);
   }
 );
 

@@ -7,7 +7,7 @@ let doWork = function (job, timer, isOK) {
         resolve(`完成工作: ${job} at ${dt.toISOString()}`);
       } else {
         // reject 是拒絕用的函式 --> 最終失敗
-        reject(`失敗了: ${job}`);
+        reject(`失敗了: 不想${job}`);
       }
     }, timer);
   });
@@ -22,23 +22,46 @@ let job = doWork("刷牙", 3000, true);
 
 // then
 job
-  .then((resolve) => {
-    console.log("第 1 個函式被呼叫了", resolve);
-    return doWork("吃早餐", 5000, true);
-    // 即使我們回傳的是數字，還是會包成 promise 物件
-    // Promise.resolve(1)
-  })
-  .then((result) => {
-    console.log("第 2 個 then", result);
-    return doWork("寫作業", 3000, true);
-  })
-  .then((result) => {
-    console.log("第 3 個 then", result);
-    return doWork("睡午覺", 4000, true);
-  })
-  .then((result) => {
-    console.log("第 4 個 then", result);
-  })
+  .then(
+    (resolve) => {
+      console.log("第 1 個函式被呼叫了", resolve);
+      return doWork("吃早餐", 5000, false);
+      // 即使我們回傳的是數字，還是會包成 promise 物件
+      // Promise.resolve(1)
+    },
+    (error) => {
+      console.log("第 1 個函式被呼叫了", error);
+      return doWork("吃早餐", 5000, true);
+    }
+  )
+  .then(
+    (result) => {
+      console.log("第 2 個 then", result);
+      return doWork("寫作業", 3000, false);
+    },
+    (error) => {
+      console.log("第 2 個 then", error);
+      return doWork("寫作業", 3000, false);
+    }
+  )
+  .then(
+    (result) => {
+      console.log("第 3 個 then", result);
+      return doWork("睡午覺", 4000, true);
+    },
+    (error) => {
+      console.log("第 3 個 then", error);
+      return doWork("睡午覺", 4000, true);
+    }
+  )
+  .then(
+    (result) => {
+      console.log("第 4 個 then", result);
+    },
+    (error) => {
+      console.log("第 4 個 then", error);
+    }
+  )
   .catch((error) => {
     console.log(error);
   })

@@ -17,7 +17,7 @@ console.log(5);
 
 /* 從上到下先略過function印出 4
 function被呼叫印出 1
-遇到 promise 丟給 Webapis ，也因為await所以 function 後面要等待
+遇到 promise 丟給 暗樁(background threads) ，也因為await所以 function 後面要等待
 function外，繼續往下印出 5
 stack內全部的任務都完成，再把setTimeout拿來，印出 2
 有resolve所以繼續往下印出 3 */

@@ -17,6 +17,6 @@ console.log(5);
 
 /* 從上到下先略過function印出 4
 function被呼叫印出 1
-setTimeout丟給 Webapis 做，再往下印出 3
+setTimeout丟給 暗樁(background threads) 做，再往下印出 3
 function結束，往下印出 5
 stack內全部的任務都完成，再把setTimeout拿來，印出 2 */

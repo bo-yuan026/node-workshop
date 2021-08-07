@@ -1,5 +1,9 @@
 const axios = require("axios");
 const moment = require("moment");
+const fs = require("fs");
+
+let stockNumber = fs.readFileSync("stock.txt", "utf8");
+// console.log(stockNumber);
 
 let today = moment().format("YYYYMMDD");
 
@@ -8,7 +12,7 @@ axios
     params: {
       response: "json",
       date: today,
-      stockNo: 2330,
+      stockNo: stockNumber,
     },
   })
   .then(function (response) {

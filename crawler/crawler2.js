@@ -22,21 +22,17 @@ new Promise((resolve, reject) => {
   } else {
     reject(`出錯了`);
   }
-}).then((stockNumber) => {
-  axios
-    .get("https://www.twse.com.tw/exchangeReport/STOCK_DAY", {
+})
+  .then((stockNumber) => {
+    return axios.get("https://www.twse.com.tw/exchangeReport/STOCK_DAY", {
       params: {
         response: "json",
         date: today,
         stockNo: stockNumber,
       },
-    })
-    .then(function (response) {
-      // handle success
-      console.log(response.data.title);
-    })
-    .catch(function (error) {
-      // handle error
-      console.log(error);
     });
-});
+  })
+  .then(function (response) {
+    // handle success
+    console.log(response.data);
+  });

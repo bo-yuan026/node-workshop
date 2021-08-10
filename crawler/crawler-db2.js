@@ -48,7 +48,7 @@ function getData(stockNumber) {
 function insertDataPromise(insertData) {
   return new Promise((resolve, reject) => {
     connection.query(
-      (sql = "INSERT INTO stock_price (stock_id, date, traded_amount, turnover, open_price, high_price, low_price, close_price, delta_price, transactions_number) VALUES ?"),
+      (sql = "INSERT IGNORE INTO stock_price (stock_id, date, traded_amount, turnover, open_price, high_price, low_price, close_price, delta_price, transactions_number) VALUES ?"),
       [insertData],
       function (error, result, fields) {
         if (error) {

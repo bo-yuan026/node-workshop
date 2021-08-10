@@ -13,12 +13,12 @@ const connection = mysql.createConnection({
   database: process.env.DB_NAME,
 });
 
-connection.connect((err) => {
-  if (err) {
-    console.error("資料庫連不上");
-    throw err;
-  }
-});
+// connection.connect((err) => {
+//   if (err) {
+//     console.error("資料庫連不上");
+//     throw err;
+//   }
+// });
 
 let today = moment().format("YYYYMMDD");
 
@@ -48,7 +48,7 @@ function getData(stockNumber) {
 function insertDataPromise(insertData) {
   return new Promise((resolve, reject) => {
     connection.query(
-      (sql = "INSERT INTO stock_price (stock_id, date, open_price, high_price, low_price, close_price, delta_price, transactions, volume, amount) VALUES ?"),
+      (sql = "INSERT INTO stock_price (stock_id, date, traded_amount, turnover, open_price, high_price, low_price, close_price, delta_price, transactions_number) VALUES ?"),
       [insertData],
       function (error, result, fields) {
         if (error) {
@@ -64,26 +64,42 @@ let arr = [];
 async function f() {
   try {
     const readFile = await getStockNumber();
+
+    // 在資料庫的 stock 表格查看，這個代碼是否在我們的資料範圍內
+    let queryStock = new Promise((resolve, reject)=>{
+        connection.query("SELECT * FROM stock WHERE stock_id = ?",[readFile], (err,result)=>{
+        if(err){
+          reject(err);
+        }
+        resolve(result);
+        console.log("get->", readFile);
+      })
+      
+    })
+    if(queryStock.length === 0) {
+        console.log("789");
+        throw "這個代碼不在此資料庫的查詢範圍中";
+      }
+
+    // 有，去證交所爬資料回來
     const stock = await getData(readFile);
-    // console.log(stock.data);
     let eachData = stock.data;
 
-    for (i = 0; i < eachData.data.length; i++) {
-      // arr = stock.data.data[i];
-      let insertData = eachData.data.map((item) => {
-        item = item.map((value) => {
-          value = value.replace(/,/g, "");
-          // console.log(value);
-          return value.replace(/,/g, "");
-        });
-        item[0] = (parseInt(item[0].replace(/\//g, "")) + 19110000).toString();
-        item.unshift(stockNumber);
-        return item;
+
+    let insertData = eachData.data.map((item) => {
+      item = item.map((value) => {
+        value = value.replace(/,/g, "");
+        // console.log(value);
+        return value.replace(/,/g, "");
       });
-      // return insertData;
-      const startInsert = await insertDataPromise(insertData);
-      console.log(startInsert);
-    }
+      item[0] = (parseInt(item[0].replace(/\//g, "")) + 19110000).toString();
+      item.unshift(stockNumber);
+      return item;
+    });
+
+    // 資料放進資料庫
+    const startInsert = await insertDataPromise(insertData);
+    console.log(startInsert);
 
     // const startInsert = await insertDataPromise(insertData);
   } catch (error) {

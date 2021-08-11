@@ -60,24 +60,28 @@ function insertDataPromise(insertData) {
   });
 }
 
+
+// 在資料庫的 stock 表格查看，這個代碼是否在我們的資料範圍內
+function getStockFromDB(readFile) {
+  return  new Promise((resolve, reject)=>{
+      connection.query("SELECT * FROM stock WHERE stock_id = ?",[readFile], (err,result)=>{
+      if(err){
+      reject(err);
+      }
+      resolve(result);
+      console.log("get->", readFile);
+    }) 
+  })
+}
+
 let arr = [];
 async function f() {
   try {
     const readFile = await getStockNumber();
 
-    // 在資料庫的 stock 表格查看，這個代碼是否在我們的資料範圍內
-    let queryStock = new Promise((resolve, reject)=>{
-        connection.query("SELECT * FROM stock WHERE stock_id = ?",[readFile], (err,result)=>{
-        if(err){
-          reject(err);
-        }
-        resolve(result);
-        console.log("get->", readFile);
-      })
-      
-    })
-    if(queryStock.length === 0) {
-        console.log("789");
+    const checkStock = await getStockFromDB(readFile);
+
+    if(checkStock.length === 0) {
         throw "這個代碼不在此資料庫的查詢範圍中";
       }
 

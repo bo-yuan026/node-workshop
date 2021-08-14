@@ -13,16 +13,9 @@ const connection = mysql.createConnection({
   database: process.env.DB_NAME,
 });
 
-// connection.connect((err) => {
-//   if (err) {
-//     console.error("資料庫連不上");
-//     throw err;
-//   }
-// });
-
 let today = moment().format("YYYYMMDD");
 
-let stockNumber = fs.readFileSync("stock.txt", "utf8");
+// let stockNumber = fs.readFileSync("stock.txt", "utf8");
 
 function getStockNumber() {
   return new Promise((resolve, reject) => {
@@ -66,7 +59,7 @@ function getStockFromDB(readFile) {
   return  new Promise((resolve, reject)=>{
       connection.query("SELECT * FROM stock WHERE stock_id = ?",[readFile], (err,result)=>{
       if(err){
-      reject(err);
+        reject(err);
       }
       resolve(result);
       console.log("get->", readFile);
@@ -74,7 +67,6 @@ function getStockFromDB(readFile) {
   })
 }
 
-let arr = [];
 async function f() {
   try {
     const readFile = await getStockNumber();
@@ -92,7 +84,7 @@ async function f() {
 
     let insertData = eachData.data.map((item) => {
       item = item.map((value) => {
-        value = value.replace(/,/g, "");
+        // value = value.replace(/,/g, "");
         // console.log(value);
         return value.replace(/,/g, "");
       });

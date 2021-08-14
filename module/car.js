@@ -1,29 +1,40 @@
 let car = {
-    color: "red",
-    brand: "Audi",
-    id: 9527,
-    price: "99999NTW"
+    color : "red",
+    brand : "Audi",
+    id : 9527,
+    price : "99999NTW",
+    owner : ""
 }
 
-function showBrand() {
+function getBrand() {
     return car.brand
 }
 
-function showColor() {
+function getColor() {
     return car.color
 }
 
-function showPrice() {
+function getPrice() {
     return car.price
 }
 
-function showID() {
+function getID() {
     return car.id
 }
 
+function getOwner() {
+    return car.owner
+}
+
+function setOwner(newOwner) {
+    return car.owner = newOwner
+}
+
 module.exports = {
-    showBrand,
-    showColor,
-    showPrice,
-    showID
+    getBrand,
+    getColor,
+    getPrice,
+    getID,
+    getOwner,
+    setOwner
 }

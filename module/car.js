@@ -27,7 +27,7 @@ function getOwner() {
 }
 
 function setOwner(newOwner) {
-    return car.owner = newOwner
+    car.owner = newOwner
 }
 
 module.exports = {

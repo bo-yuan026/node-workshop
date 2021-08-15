@@ -3,20 +3,19 @@ const connection = require("./components/ConnectDataBase");
 const getData = require("./components/GetDataFromTWSE");
 
 function insertDataPromise(insertData) {
-  return new Promise((resolve, reject) => {
-    connection.query(
-      (sql =
-        "INSERT IGNORE INTO stock_price (stock_id, date, traded_amount, turnover, open_price, high_price, low_price, close_price, delta_price, transactions_number) VALUES ?"),
-      [insertData],
-      function (error, result, fields) {
-        if (error) {
-          reject(error);
-        }
-        // console.log(result);
-        resolve("成功傳入資料庫");
+  return connection.queryAsync(
+    (sql =
+      "INSERT IGNORE INTO stock_price (stock_id, date, traded_amount, turnover, open_price, high_price, low_price, close_price, delta_price, transactions_number) VALUES ?"),
+    [insertData],
+    function (error, result, fields) {
+      if (error) {
+        console.error(error);
       }
-    );
-  });
+      // console.log(result);
+      console.log("成功傳入資料庫");
+      console.log("789");
+    }
+  );
 }
 
 async function f() {
@@ -35,11 +34,12 @@ async function f() {
 
     // 資料放進資料庫
     const startInsert = await insertDataPromise(insertData);
+    console.log("為什麼到不了這裡?");
     console.log(startInsert);
   } catch (error) {
     console.error("**********\n", error);
   } finally {
-    // 不關閉連線，認為程式一直在執行
+    console.log("123");
     connection.end();
   }
 }

@@ -1,7 +1,12 @@
 const { response, request } = require("express");
 const express = require("express");
+const stock = require("./utils/stock");
+const stockNumber = require("./utils/stockNumber");
+const twse = require("./utils/twse");
 
 let app = express();
+
+console.log(stock);
 
 app.listen(3000, () => {
   console.log("web server啟動!!");

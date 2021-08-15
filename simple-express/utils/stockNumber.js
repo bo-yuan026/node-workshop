@@ -7,7 +7,7 @@ function getStockNumber() {
         reject(`出錯了: ${err}`);
       } else {
         resolve(stockNumber);
-        console.log(stockNumber);
+        // console.log(stockNumber, "---------------");
       }
     });
   });

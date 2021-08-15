@@ -5,10 +5,13 @@ const stockNumber = require("./utils/stockNumber");
 const twse = require("./utils/twse");
 
 let app = express();
+const cors = require("cors");
+app.use(cors());
 
-console.log(stock);
+// console.log(stockNumber.getStockNumber());
 
-app.listen(3000, () => {
+app.listen(3000, async () => {
+  // await stock.connect();
   console.log("web server啟動!!");
 });
 
@@ -33,4 +36,26 @@ app.get("/about", (request, response, next) => {
 
 app.get("/abc", (request, response, next) => {
   response.send("被你發現abc了");
+});
+
+app.get("/stock", async (request, response, next) => {
+  let stockNum = await stockNumber.getStockNumber();
+  // let result = await twse.getData(stockNum);
+  response.json(stockNum);
+});
+
+app.get("/stock/:stockNum", async (request, response, next) => {
+  let stockNum = await stockNumber.getStockNumber();
+  let result = await twse.getData(stockNum);
+  // console.log(request.params.stockNum);
+  if (request.params.stockNum !== stockNum) {
+    return response.send(`沒有提供這個股票代碼: ${request.params.stockNum}`);
+    // 在股票代碼不對的情況下，該怎麼送到下面的use
+  }
+  response.json(result);
+});
+
+app.use((req, res, next) => {
+  res.status(404);
+  res.send("Not Found 404");
 });

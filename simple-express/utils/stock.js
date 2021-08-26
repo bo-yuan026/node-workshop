@@ -11,6 +11,6 @@ let connection = mysql.createPool({
   connectionLimit: process.env.DB_CONNECT || 10,
 });
 
-connection = Promise.promisifyAll(connection);
+// connection = Promise.promisifyAll(connection);
 
 module.exports = connection;

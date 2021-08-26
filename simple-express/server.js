@@ -6,14 +6,10 @@ const twse = require("./utils/twse");
 
 let app = express();
 const cors = require("cors");
+const connection = require("./utils/stock");
 app.use(cors());
 
 // console.log(stockNumber.getStockNumber());
-
-app.listen(3000, async () => {
-  // await stock.connect();
-  console.log("web server啟動!!");
-});
 
 app.use((request, response, next) => {
   console.log("我是第一個中間件");
@@ -44,18 +40,26 @@ app.get("/stock", async (request, response, next) => {
   response.json(stockNum);
 });
 
-app.get("/stock/:stockNum", async (request, response, next) => {
-  let stockNum = await stockNumber.getStockNumber();
-  let result = await twse.getData(stockNum);
+app.get("/stock/:stockNum", (request, response, next) => {
+  // let stockNum = await stockNumber.getStockNumber();
+  // let result = await twse.getData(stockNum);
   // console.log(request.params.stockNum);
-  if (request.params.stockNum !== stockNum) {
-    return response.send(`沒有提供這個股票代碼: ${request.params.stockNum}`);
-    // 在股票代碼不對的情況下，該怎麼送到下面的use
-  }
-  response.json(result);
+  // if (request.params.stockNum !== stockNum) {
+  //   return response.send(`沒有提供這個股票代碼: ${request.params.stockNum}`);
+  //   // 在股票代碼不對的情況下，該怎麼送到下面的use
+  //  上面是直接從網站拿資料
+  // }
+  const sqlSelect = "SELECT * FROM stock_price WHERE stock_id = ?";
+  connection.query(sqlSelect, [request.params.stockNum], (err, result) => {
+    response.json(result);
+  });
 });
 
 app.use((req, res, next) => {
   res.status(404);
   res.send("Not Found 404");
+});
+
+app.listen(3001, () => {
+  console.log("web server啟動，running on port 3001");
 });

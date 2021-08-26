@@ -3,6 +3,7 @@ const axios = require("axios");
 
 async function getData(stockNumber) {
   // 去證交所爬資料回來
+
   let today = moment().format("YYYYMMDD");
   let stock = await axios.get("https://www.twse.com.tw/exchangeReport/STOCK_DAY", {
     params: {
